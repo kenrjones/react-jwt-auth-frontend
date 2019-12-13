@@ -23,7 +23,8 @@ class App extends Component {
     password: '',
     isLoggedIn: false,
     user: null,
-    Headlines:[]
+    Headlines:[],
+    hideNavBar: false
   }
 
   getHeadlines() {
@@ -144,17 +145,30 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  hideNavBar = () => {
+    this.setState({
+      hideNavBar: true
+    })
+  }
+
+  showNavBar = () => {
+    this.setState({
+      hideNavBar: false
+    })
+  }
+
   render() {
+
     return (
 
       <div>
-        <NavBar isLoggedIn={this.state.isLoggedIn} user={this.state.user} />
+        <NavBar isLoggedIn={this.state.isLoggedIn} user={this.state.user} hideNavBar={this.state.hideNavBar}/>
         <div className='body'>
           <Switch>
             <Route path='/signup'
               render={(props) => {
                 return (
-                  <SignUpForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleSignUp={this.handleSignUp} />
+                  <SignUpForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleSignUp={this.handleSignUp} hideNavBar={this.hideNavBar} />
                 )
               }}
             />
@@ -168,14 +182,14 @@ class App extends Component {
             <Route path='/login'
               render={(props) => {
                 return (
-                  <LogInForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleLogIn={this.handleLogIn} />
+                  <LogInForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleLogIn={this.handleLogIn} hideNavBar={this.hideNavBar}/>
                 )
               }}
             />
             <Route path='/profile'
               render={(props) => {
                 return (
-                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} />
+                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} />
                 )
               }}
             />

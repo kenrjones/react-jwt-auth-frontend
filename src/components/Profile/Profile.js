@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import './Profile.css'
 
 class Profile extends Component {
+
+  componentDidMount(){
+    this.props.showNavBar();
+  }
+
   render() {
     if (this.props.user != null) {
       return (

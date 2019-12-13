@@ -17,7 +17,7 @@ class NavBar extends Component {
       navBarItems.push(<NavItem key={4} href='/login'>Log In</NavItem>)
     }
     return (
-      <Navbar brand='LOGO' className='nav' right>
+      <Navbar brand='LOGO' className='nav' style={{display: this.props.hideNavBar ? 'none' : 'block'}} right>
 
         {navBarItems}
       </Navbar>

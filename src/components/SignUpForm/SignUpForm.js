@@ -3,6 +3,11 @@ import React, { Component } from 'react'
 import './SignUpForm.css'
 
 class SignUpForm extends Component {
+  
+  componentDidMount(){
+    this.props.hideNavBar();
+  }
+
   render () {
     return (
       <div>
@@ -21,8 +26,13 @@ class SignUpForm extends Component {
 
           <div>
             <label htmlFor='password'>PASSWORD</label>
-            <input type='text' name='password' onChange={this.props.handleInput} />
+            <input type='password' name='password' onChange={this.props.handleInput} />
           </div>
+
+          <div>
+            <h6>Already have an account? <a href="http://localhost:3000/login">Login here</a> </h6>
+          </div>
+
           <input value='Submit' type='submit' onClick={this.props.handleSignUp} />
         </form>
       </div>
