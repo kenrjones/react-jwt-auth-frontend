@@ -13,14 +13,31 @@ import LogOut from '../LogOut/LogOut'
 import Profile from '../Profile/Profile'
 import './App.css'
 
-const databaseUrl = process.env.NODE_ENV === 'production' ? process.env.BACKEND_APP_URL : 'http://localhost:3000'
+// const databaseUrl = process.env.NODE_ENV === 'production' ? process.env.BACKEND_APP_URL : 'http://localhost:3000'
+const databaseUrl = 'https://sports-news-777.herokuapp.com'
 
 class App extends Component {
   state = {
     email: '',
+    username: '',
     password: '',
     isLoggedIn: false,
-    user: null
+    user: null,
+    Headlines:[]
+  }
+
+  getHeadlines() {
+    const url = 'https://newsapi.org/v2/top-headlines?' + 'country=us&' + 'apiKey=2fbfd60a715c400081cecdd7c3238037';
+    axios({
+      method: 'GET',
+      url: url
+    }).then(response => {
+      let articles = response.data.articles 
+      this.setState({        
+        Headlines: articles,
+      })
+      console.log(response);
+    })
   }
 
   componentDidMount() {
@@ -33,6 +50,7 @@ class App extends Component {
         isLoggedIn: false
       })
     }
+    this.getHeadlines()
     // if (localStorage.token) {
     //   axios(
     //     {
@@ -76,6 +94,7 @@ class App extends Component {
     e.preventDefault()
     let newUser = {
       email: this.state.email,
+      username: this.state.username,
       password: this.state.password
     }
     axios(
@@ -112,7 +131,7 @@ class App extends Component {
         window.localStorage.setItem('token', response.data.token)
         this.setState({
           isLoggedIn: true,
-          user: response.data.user,
+          userId: response.data.userId,
           email: '',
           password: ''
         })
@@ -127,6 +146,7 @@ class App extends Component {
 
   render() {
     return (
+
       <div>
         <NavBar isLoggedIn={this.state.isLoggedIn} user={this.state.user} />
         <div className='body'>

@@ -10,12 +10,17 @@ class SignUpForm extends Component {
 
         <form>
           <div>
-            <label htmlFor='email'>Email</label>
+            <label htmlFor='email'>EMAIL</label>
             <input type='text' name='email' onChange={this.props.handleInput} />
           </div>
 
           <div>
-            <label htmlFor='password'>Password</label>
+            <label htmlFor='username'>USERNAME</label>
+            <input type='text' name='username' onChange={this.props.handleInput} />
+          </div>
+
+          <div>
+            <label htmlFor='password'>PASSWORD</label>
             <input type='text' name='password' onChange={this.props.handleInput} />
           </div>
           <input value='Submit' type='submit' onClick={this.props.handleSignUp} />
