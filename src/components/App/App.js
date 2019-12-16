@@ -11,7 +11,7 @@ import SignUpForm from '../SignUpForm/SignUpForm'
 import LogInForm from '../LogInForm/LogInForm'
 import LogOut from '../LogOut/LogOut'
 import Profile from '../Profile/Profile'
-import FeaturedHeadlines from './FeaturedHeadlines'
+import FeaturedHeadlines from '..//FeaturedHeadlines'
 import './App.css'
 
 // const databaseUrl = process.env.NODE_ENV === 'production' ? process.env.BACKEND_APP_URL : 'http://localhost:3000'
@@ -78,8 +78,6 @@ class App extends Component {
     //   })
     // }
   }
-
-  
 
   handleLogOut = (e) => {
     e.preventDefault()
@@ -200,10 +198,8 @@ class App extends Component {
                 )
               }}
             />
+            <FeaturedHeadlines featuredHeadlines={this.state.featuredHeadlines} />
           </Switch>
-        </div>
-        <div>
-        <FeaturedHeadlines featuredHeadlines={this.state.featuredHeadlines} />
         </div>
       </div>
     )
