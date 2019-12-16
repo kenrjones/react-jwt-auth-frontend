@@ -20,16 +20,15 @@ class Profile extends Component {
     let secondaryHeadlines
     let titleButton 
     if( this.state.moreNews){
-      secondaryHeadlines =  <SecondaryHeadlines secondaryHeadlines={this.props.secondaryHeadlines} />
+      secondaryHeadlines =  <SecondaryHeadlines secondaryHeadlines={this.props.secondaryHeadlines} saveFavorite={this.props.saveFavorite}/>
       titleButton = "Less"
     }else{
       titleButton = "More"
     }
-    console.log(this.props.secondaryHeadlines)
       return (
         <div>
           <div>
-            <FeaturedHeadlines featuredHeadlines={this.props.featuredHeadlines} />
+            <FeaturedHeadlines featuredHeadlines={this.props.featuredHeadlines} saveFavorite={this.props.saveFavorite}/>
           </div>
           <div>
            {secondaryHeadlines}

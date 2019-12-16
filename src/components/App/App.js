@@ -23,10 +23,11 @@ class App extends Component {
     password: '',
     isLoggedIn: false,
     user: null,
-    Headlines:[],
+    headlines:[],
     featuredHeadlines: [],
     secondaryHeadlines: [],
-    hideNavBar: false
+    hideNavBar: false,
+    stories: []
   }
 
   getHeadlines() {
@@ -39,13 +40,10 @@ class App extends Component {
       let featuredHeadlines = articles.slice(0, 2)
       let secondaryHeadlines = articles.slice(2, 17) 
       this.setState({        
-        Headlines: articles,
+        headlines: articles,
         featuredHeadlines,
         secondaryHeadlines
       })
-      console.log(response)
-      console.log(featuredHeadlines)
-      console.log(secondaryHeadlines)
     })
   }
 
@@ -60,6 +58,7 @@ class App extends Component {
       })
     }
     this.getHeadlines()
+    this.checkUser()
     // if (localStorage.token) {
     //   axios(
     //     {
@@ -119,7 +118,7 @@ class App extends Component {
         }
         this.props.history.replace(location)
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log('SingUpError', err))
   }
 
   handleLogIn = (e) => {
@@ -136,11 +135,10 @@ class App extends Component {
       })
       .then(response => {
         window.localStorage.setItem('token', response.data.token)
+        window.localStorage.setItem('user', JSON.stringify(response.data.user))
         this.setState({
           isLoggedIn: true,
-          userId: response.data.userId,
-          email: '',
-          password: ''
+          user: response.data.user
         })
         const location = {
           pathname: '/profile',
@@ -148,7 +146,16 @@ class App extends Component {
         }
         this.props.history.replace(location)
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log('LoginError', err))
+  }
+
+  checkUser = () => {
+    if (window.localStorage.user) {
+      let user = JSON.parse(window.localStorage.getItem('user'))
+      this.setState({ user })
+      //API CALL TO GET FAV STORIES.
+      //SETSTATE STORIES
+    }
   }
 
   hideNavBar = () => {
@@ -163,30 +170,27 @@ class App extends Component {
     })
   }
 
-  saveFavorite = e => {
-    console.log('hi')
-    console.log(this.state.userId);
-    let userId = this.state.userId;
+  saveFavorite = (story) => {
+    let userId = this.state.user.id;
     userId = Number(userId);
-    e.preventDefault();
     axios({
-      url: `https://sports-news-777.herokuapp.com/stories`,
+      url: `https://sports-news-777.herokuapp.com/api/stories`,
       method: "post",
       data: {
         newStory: {
           userId: userId,
-          // image: this.state.data.articles
-          // source: this.state.question1_correct_answer,
-          // headline: this.state.question1_incorrect_answer1,
-          // description: this.state.question1_incorrect_answer2,
-          // url: this.state.question1_incorrect_answer3
+          source: story.source.name,
+          url: story.url,
+          data: JSON.stringify(story)
         }
       }
     }).then(response => {
-      this.setState(prevState => ({
-        stories: [...prevState.stories, response.data.story]
-      }));
-    });
+      let stories = this.state.stories;
+      stories.push(response.data.story);
+      this.setState({ stories })
+    }).catch(err => 
+      console.log('SaveToFavError', err)
+    )
   };
 
   render() {
@@ -214,7 +218,7 @@ class App extends Component {
             <Route path='/profile'
               render={(props) => {
                 return (
-                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.state.saveFavorite}/>
+                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite}/>
                 )
               }}
               />

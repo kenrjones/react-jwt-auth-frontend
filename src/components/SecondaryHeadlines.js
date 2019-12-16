@@ -10,7 +10,7 @@ const SecondaryHeadlines = (props) => {
                     <h1 className="secondary-title">{headline.title}</h1>
                     <p>{headline.description}</p>
                     <a className="link" href = {headline.url} target="_blank">READ MORE</a>
-                    <button onClick={props.saveFavorite}></button>
+                    <button onClick={() => props.saveFavorite(headline)}>Save</button>
                 </div>
             )
         })
