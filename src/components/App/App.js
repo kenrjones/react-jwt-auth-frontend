@@ -11,8 +11,6 @@ import SignUpForm from '../SignUpForm/SignUpForm'
 import LogInForm from '../LogInForm/LogInForm'
 import LogOut from '../LogOut/LogOut'
 import Profile from '../Profile/Profile'
-import FeaturedHeadlines from '..//FeaturedHeadlines'
-import SecondaryHeadlines from '..//SecondaryHeadlines'
 import './App.css'
 
 // const databaseUrl = process.env.NODE_ENV === 'production' ? process.env.BACKEND_APP_URL : 'http://localhost:3000'
@@ -26,8 +24,8 @@ class App extends Component {
     isLoggedIn: false,
     user: null,
     Headlines:[],
-    featuredHeadlines: '',
-    secondaryHeadlines: '',
+    featuredHeadlines: [],
+    secondaryHeadlines: [],
     hideNavBar: false
   }
 
@@ -46,7 +44,8 @@ class App extends Component {
         secondaryHeadlines
       })
       console.log(response)
-      console.log(featuredHeadlines);
+      console.log(featuredHeadlines)
+      console.log(secondaryHeadlines)
     })
   }
 
@@ -114,7 +113,6 @@ class App extends Component {
         data: newUser
       })
       .then(response => {
-        console.log(response)
         const location = {
           pathname: '/login',
           state: { fromDashboard: true }
@@ -137,7 +135,6 @@ class App extends Component {
         data: loginUser
       })
       .then(response => {
-        console.log(response)
         window.localStorage.setItem('token', response.data.token)
         this.setState({
           isLoggedIn: true,
@@ -166,6 +163,32 @@ class App extends Component {
     })
   }
 
+  saveFavorite = e => {
+    console.log('hi')
+    console.log(this.state.userId);
+    let userId = this.state.userId;
+    userId = Number(userId);
+    e.preventDefault();
+    axios({
+      url: `https://sports-news-777.herokuapp.com/stories`,
+      method: "post",
+      data: {
+        newStory: {
+          userId: userId,
+          // image: this.state.data.articles
+          // source: this.state.question1_correct_answer,
+          // headline: this.state.question1_incorrect_answer1,
+          // description: this.state.question1_incorrect_answer2,
+          // url: this.state.question1_incorrect_answer3
+        }
+      }
+    }).then(response => {
+      this.setState(prevState => ({
+        stories: [...prevState.stories, response.data.story]
+      }));
+    });
+  };
+
   render() {
 
     return (
@@ -191,14 +214,7 @@ class App extends Component {
             <Route path='/profile'
               render={(props) => {
                 return (
-                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} />
-                )
-              }}
-              />
-              <Route path='/profile/more-headlines'
-              render={(props) => {
-                return (
-                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} />
+                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.state.saveFavorite}/>
                 )
               }}
               />
@@ -209,7 +225,6 @@ class App extends Component {
                 )
               }}
             />
-            <FeaturedHeadlines featuredHeadlines={this.state.featuredHeadlines} />
           </Switch>
         </div>
       </div>

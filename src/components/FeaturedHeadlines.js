@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const FeaturedHeadlines = (props) => {
     if (props.featuredHeadlines) {
         let featuredNews = props.featuredHeadlines.map( (headline, index) => {
@@ -10,6 +11,7 @@ const FeaturedHeadlines = (props) => {
                     <h1 className="featured-title">{headline.title}</h1>
                     <p>{headline.description}</p>
                     <a className="link" href = {headline.url} target="_blank">READ MORE</a>
+                    <button onClick={props.saveFavorite}></button>
                 </div>
             )
         })
