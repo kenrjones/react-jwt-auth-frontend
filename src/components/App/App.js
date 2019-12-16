@@ -12,6 +12,7 @@ import LogInForm from '../LogInForm/LogInForm'
 import LogOut from '../LogOut/LogOut'
 import Profile from '../Profile/Profile'
 import FeaturedHeadlines from '..//FeaturedHeadlines'
+import SecondaryHeadlines from '..//SecondaryHeadlines'
 import './App.css'
 
 // const databaseUrl = process.env.NODE_ENV === 'production' ? process.env.BACKEND_APP_URL : 'http://localhost:3000'
@@ -26,6 +27,7 @@ class App extends Component {
     user: null,
     Headlines:[],
     featuredHeadlines: '',
+    secondaryHeadlines: '',
     hideNavBar: false
   }
 
@@ -36,10 +38,12 @@ class App extends Component {
       url: url
     }).then(response => {
       let articles = response.data.articles
-      let featuredHeadlines = articles.slice(0, 2) 
+      let featuredHeadlines = articles.slice(0, 2)
+      let secondaryHeadlines = articles.slice(2, 17) 
       this.setState({        
         Headlines: articles,
-        featuredHeadlines
+        featuredHeadlines,
+        secondaryHeadlines
       })
       console.log(response)
       console.log(featuredHeadlines);
@@ -185,6 +189,13 @@ class App extends Component {
               }}
             /> 
             <Route path='/profile'
+              render={(props) => {
+                return (
+                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} />
+                )
+              }}
+              />
+              <Route path='/profile/more-headlines'
               render={(props) => {
                 return (
                   <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} />
