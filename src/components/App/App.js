@@ -11,6 +11,7 @@ import SignUpForm from '../SignUpForm/SignUpForm'
 import LogInForm from '../LogInForm/LogInForm'
 import LogOut from '../LogOut/LogOut'
 import Profile from '../Profile/Profile'
+import FeaturedHeadlines from './FeaturedHeadlines'
 import './App.css'
 
 // const databaseUrl = process.env.NODE_ENV === 'production' ? process.env.BACKEND_APP_URL : 'http://localhost:3000'
@@ -24,6 +25,7 @@ class App extends Component {
     isLoggedIn: false,
     user: null,
     Headlines:[],
+    featuredHeadlines: '',
     hideNavBar: false
   }
 
@@ -33,11 +35,14 @@ class App extends Component {
       method: 'GET',
       url: url
     }).then(response => {
-      let articles = response.data.articles 
+      let articles = response.data.articles
+      let featuredHeadlines = articles.slice(0, 2) 
       this.setState({        
         Headlines: articles,
+        featuredHeadlines
       })
-      console.log(response);
+      console.log(response)
+      console.log(featuredHeadlines);
     })
   }
 
@@ -73,6 +78,8 @@ class App extends Component {
     //   })
     // }
   }
+
+  
 
   handleLogOut = (e) => {
     e.preventDefault()
@@ -165,13 +172,27 @@ class App extends Component {
         <NavBar isLoggedIn={this.state.isLoggedIn} user={this.state.user} hideNavBar={this.state.hideNavBar}/>
         <div className='body'>
           <Switch>
+          <Route path='/login'
+              render={(props) => {
+                return (
+                  <LogInForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleLogIn={this.handleLogIn} hideNavBar={this.hideNavBar}/>
+                )
+              }}
+            />
             <Route path='/signup'
               render={(props) => {
                 return (
                   <SignUpForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleSignUp={this.handleSignUp} hideNavBar={this.hideNavBar} />
                 )
               }}
-            />
+            /> 
+            <Route path='/profile'
+              render={(props) => {
+                return (
+                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} />
+                )
+              }}
+              />
             <Route path='/logout'
               render={(props) => {
                 return (
@@ -179,21 +200,10 @@ class App extends Component {
                 )
               }}
             />
-            <Route path='/login'
-              render={(props) => {
-                return (
-                  <LogInForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleLogIn={this.handleLogIn} hideNavBar={this.hideNavBar}/>
-                )
-              }}
-            />
-            <Route path='/profile'
-              render={(props) => {
-                return (
-                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} />
-                )
-              }}
-            />
           </Switch>
+        </div>
+        <div>
+        <FeaturedHeadlines featuredHeadlines={this.state.featuredHeadlines} />
         </div>
       </div>
     )
