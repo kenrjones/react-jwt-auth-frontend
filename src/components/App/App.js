@@ -221,8 +221,28 @@ class App extends Component {
     )
   };
 
-  render() {
 
+  getStories = e => {
+    console.log('favorite stories')
+    // let id = this.state.id;
+    console.log(this.state)
+    axios({
+      url: `https://sports-news-777.herokuapp.com/api/users/${this.state.user.id}`,
+      method: "get"
+    }).then(response => {
+      this.setState({
+        stories: response.data.Stories
+      });
+      console.log(response.data.Stories);
+      // console.log(response.data.instructor.quizzes)
+      // console.log('quizzes', this.state.quizzes)
+    });
+  };
+
+
+
+  render() {
+    console.log(this.state)
     return (
 
       <div>
@@ -246,7 +266,14 @@ class App extends Component {
             <Route path='/profile'
               render={(props) => {
                 return (
-                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite} favoriteHeadlines={this.favoriteHeadlines}/>
+                  <Profile 
+                  isLoggedIn={this.state.isLoggedIn} 
+                  user={this.state.user}
+                  getStories={this.getStories}
+                  stories={this.state.stories} 
+                  showNavBar={this.showNavBar} 
+                  saveFavorite={this.state.saveFavorite}
+                  />
                 )
               }}
               />

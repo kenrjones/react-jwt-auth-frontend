@@ -2,15 +2,15 @@ import React from 'react'
 
 
 const FavoriteHeadlines = (props) => {
-    if (props.favoriteHeadlines) {
-        let favoritenews = props.featuredHeadlines.map( (headline, index) => {
+    if (props.stories) {
+        let favoritenews = props.stories.map( (headline, index) => {
             if (props.user) {
                 return (
                     <div key={index} id="favorite-articles">
                         <img src={headline.urlToImage} alt={headline.title}></img>
                         <p className="favorite-source">{headline.source.name}</p>
                         <h1 className="favorite-title">{headline.title}</h1>
-                        <p>{headline.description}</p>
+                        <p>{headline.data.description}</p>
                         <a className="link" href = {headline.url} target="_blank">READ MORE</a>
                         <button onClick={() => props.saveFavorite(headline)}>Save</button>
                     </div>

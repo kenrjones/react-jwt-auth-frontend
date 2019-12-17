@@ -10,12 +10,14 @@ class Profile extends Component {
 
   componentDidMount(){
     this.props.showNavBar();
+    this.props.getStories()
   }
 
   render(props) {
+    console.log('stories', this.props.stories)
     return (
       <div>
-        <FavoriteHeadlines favoriteHeadlines={this.props.favoriteHeadlines} />
+        <FavoriteHeadlines stories={this.props.stories} />
       </div>
     )
   }
