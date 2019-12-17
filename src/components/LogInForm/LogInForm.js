@@ -10,6 +10,10 @@ class LogInForm extends Component {
 
 
   render () {
+    let loader;
+    if (this.props.loading) {
+      loader = [<p>loading...</p>]
+    }
     return (
       <div>
         <h2>Log In</h2>
@@ -31,6 +35,7 @@ class LogInForm extends Component {
 
           <input value='Submit' type='submit' onClick={this.props.handleLogIn} />
         </form>
+        {loader}
       </div>
     )
   }

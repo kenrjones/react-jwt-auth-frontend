@@ -11,6 +11,7 @@ import SignUpForm from '../SignUpForm/SignUpForm'
 import LogInForm from '../LogInForm/LogInForm'
 import LogOut from '../LogOut/LogOut'
 import Profile from '../Profile/Profile'
+import Home from '../Home/Home'
 import './App.css'
 
 // const databaseUrl = process.env.NODE_ENV === 'production' ? process.env.BACKEND_APP_URL : 'http://localhost:3000'
@@ -27,7 +28,8 @@ class App extends Component {
     featuredHeadlines: [],
     secondaryHeadlines: [],
     hideNavBar: false,
-    stories: []
+    stories: [],
+    loading: false
   }
 
   getHeadlines() {
@@ -87,7 +89,8 @@ class App extends Component {
     this.setState({
       email: '',
       password: '',
-      isLoggedIn: false
+      isLoggedIn: false,
+      user: null
     })
     this.props.history.push('/')
   }
@@ -123,6 +126,9 @@ class App extends Component {
 
   handleLogIn = (e) => {
     e.preventDefault()
+    this.setState({
+      loading: true
+    })
     let loginUser = {
       email: this.state.email,
       password: this.state.password
@@ -138,15 +144,21 @@ class App extends Component {
         window.localStorage.setItem('user', JSON.stringify(response.data.user))
         this.setState({
           isLoggedIn: true,
-          user: response.data.user
+          user: response.data.user,
+          loading: false
         })
         const location = {
-          pathname: '/profile',
+          pathname: '/',
           state: { fromDashboard: true }
         }
         this.props.history.replace(location)
       })
-      .catch(err => console.log('LoginError', err))
+      .catch( err => { 
+        console.log('LoginError', err)
+        this.setState({
+          loading: false
+        })
+      })
   }
 
   checkUser = () => {
@@ -204,7 +216,7 @@ class App extends Component {
           <Route path='/login'
               render={(props) => {
                 return (
-                  <LogInForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleLogIn={this.handleLogIn} hideNavBar={this.hideNavBar}/>
+                  <LogInForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleLogIn={this.handleLogIn} hideNavBar={this.hideNavBar} loading={this.state.loading}/>
                 )
               }}
             />
@@ -232,7 +244,7 @@ class App extends Component {
             <Route path='/'
               render={(props) => {
                 return (
-                  <Profile user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite}/>
+                  <Home user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite}/>
                 )
               }}
               />
