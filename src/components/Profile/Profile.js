@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import FeaturedHeadlines from '../FeaturedHeadlines'
-import SecondaryHeadlines from '../SecondaryHeadlines'
+import FavoriteHeadlines from '../FavoriteHeadlines'
 import './Profile.css'
 
 class Profile extends Component {
@@ -13,10 +12,10 @@ class Profile extends Component {
     this.props.showNavBar();
   }
 
-  render() {
+  render(props) {
     return (
       <div>
-        PROFILE PAGE
+        <FavoriteHeadlines favoriteHeadlines={this.props.favoriteHeadlines} />
       </div>
     )
   }

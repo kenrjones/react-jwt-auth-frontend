@@ -27,6 +27,7 @@ class App extends Component {
     headlines:[],
     featuredHeadlines: [],
     secondaryHeadlines: [],
+    favoriteHeadlines: [],
     hideNavBar: false,
     stories: [],
     loading: false
@@ -40,11 +41,13 @@ class App extends Component {
     }).then(response => {
       let articles = response.data.articles
       let featuredHeadlines = articles.slice(0, 2)
-      let secondaryHeadlines = articles.slice(2, 17) 
+      let secondaryHeadlines = articles.slice(2, 17)
+      let favoriteHeadlines = articles 
       this.setState({        
         headlines: articles,
         featuredHeadlines,
-        secondaryHeadlines
+        secondaryHeadlines,
+        favoriteHeadlines
       })
     })
   }
@@ -161,6 +164,19 @@ class App extends Component {
       })
   }
 
+  deleteUser = () => {
+    console.log('deleteUser')
+    console.log(this.state.user.id)
+  axios({
+      url: `https://sports-news-777.herokuapp.com/api/users/${this.state.user.id}`,
+      method: 'delete'
+    })
+      .then(response => {
+        // this.setState({ users: response.data.users })
+        this.setState({deleted:true})
+      })
+  }
+
   checkUser = () => {
     if (window.localStorage.user) {
       let user = JSON.parse(window.localStorage.getItem('user'))
@@ -230,7 +246,7 @@ class App extends Component {
             <Route path='/profile'
               render={(props) => {
                 return (
-                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite}/>
+                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite} favoriteHeadlines={this.favoriteHeadlines}/>
                 )
               }}
               />
@@ -250,6 +266,9 @@ class App extends Component {
               />
           </Switch>
         </div>
+        <footer className='footer'>
+              <button onClick={this.deleteUser}>Unsubscribe</button>
+        </footer>
       </div>
     )
   }

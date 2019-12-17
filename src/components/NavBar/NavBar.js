@@ -10,7 +10,6 @@ class NavBar extends Component {
       navBarItems.push(<li key={5}>{this.props.user.username}</li>)
       navBarItems.push(<NavItem key={6} href='/profile'>Read Later</NavItem>)
       navBarItems.push(<NavItem key={2} href='/logout'>Log Out</NavItem>)
-      navBarItems.push(<NavItem key={2} href='/logout'>Unsubscribe</NavItem>)
     } else {
       navBarItems.push(<NavItem key={4} href='/login'>Log In</NavItem>)
       navBarItems.push(<NavItem key={3} href='/signup'>Sign Up</NavItem>)
