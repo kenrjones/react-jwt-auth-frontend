@@ -89,7 +89,7 @@ class App extends Component {
       password: '',
       isLoggedIn: false
     })
-    this.props.history.push('/login')
+    this.props.history.push('/')
   }
 
   handleInput = (e) => {
@@ -229,6 +229,13 @@ class App extends Component {
                 )
               }}
             />
+            <Route path='/'
+              render={(props) => {
+                return (
+                  <Profile user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite}/>
+                )
+              }}
+              />
           </Switch>
         </div>
       </div>
