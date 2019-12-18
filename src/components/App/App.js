@@ -10,6 +10,7 @@ import NavBar from '../NavBar/NavBar'
 import SignUpForm from '../SignUpForm/SignUpForm'
 import LogInForm from '../LogInForm/LogInForm'
 import LogOut from '../LogOut/LogOut'
+import ChangePassword from '../ChangePassword/ChangePassword'
 import Profile from '../Profile/Profile'
 import Home from '../Home/Home'
 import './App.css'
@@ -30,7 +31,8 @@ class App extends Component {
     favoriteHeadlines: [],
     hideNavBar: false,
     stories: [],
-    loading: false
+    loading: false,
+    updateUser: {}
   }
 
   getHeadlines() {
@@ -87,7 +89,7 @@ class App extends Component {
   }
 
   handleLogOut = (e) => {
-    e.preventDefault()
+    //e.preventDefault()
     window.localStorage.clear()
     this.setState({
       email: '',
@@ -95,7 +97,7 @@ class App extends Component {
       isLoggedIn: false,
       user: null
     })
-    this.props.history.push('/')
+    this.props.history.push('/login')
   }
 
   handleInput = (e) => {
@@ -221,46 +223,130 @@ class App extends Component {
     )
   };
 
-  render() {
 
+  onHandleChangeUser = e => {
+    let updateUser = {
+      [e.target.name]: e.target.value
+    };
+    console.log(updateUser.password);
+    this.setState((prevState, currentState) => ({
+      updateUser: { ...prevState.updateUser, ...updateUser }
+    }));
+    
+  };
+
+  //update user
+  updateUser = e => {
+    e.preventDefault();
+    console.log(this.state.user)
+    let id = this.state.user.id;
+    axios({
+      url: `https://sports-news-777.herokuapp.com/api/users/${id}`,
+      method: "put",
+      data: { updateUser: this.state.updateUser }
+    }).then(response => {
+      
+      this.setState(prevState => ({
+        updateUser: [...prevState.updateUser, response.data.updateUser]
+      }));
+    });
+
+    console.log('logout')
+    this.handleLogOut()
+  };
+
+
+  getStories = e => {
+    console.log('favorite stories')
+    // let id = this.state.id;
+    
+    axios({
+      url: `https://sports-news-777.herokuapp.com/api/users/${this.state.user.id}`,
+      method: "get"
+    }).then(response => {
+      let Stories = response.data.Stories.map( (story, index) => {
+        story.source = JSON.parse(story.data)
+        return story
+      })
+      this.setState({
+        stories: Stories
+      });
+      // console.log(response.data.instructor.quizzes)
+      // console.log('quizzes', this.state.quizzes)
+    });
+  };
+
+
+
+  render() {
+    
     return (
 
       <div>
-        <NavBar isLoggedIn={this.state.isLoggedIn} user={this.state.user} hideNavBar={this.state.hideNavBar}/>
+        <NavBar isLoggedIn={this.state.isLoggedIn} 
+        user={this.state.user} 
+        hideNavBar={this.state.hideNavBar}/>
         <div className='body'>
           <Switch>
           <Route path='/login'
               render={(props) => {
                 return (
-                  <LogInForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleLogIn={this.handleLogIn} hideNavBar={this.hideNavBar} loading={this.state.loading}/>
+                  <LogInForm isLoggedIn={this.state.isLoggedIn} 
+                  handleInput={this.handleInput} handleLogIn={this.handleLogIn} 
+                  hideNavBar={this.hideNavBar} loading={this.state.loading}/>
                 )
               }}
             />
             <Route path='/signup'
               render={(props) => {
                 return (
-                  <SignUpForm isLoggedIn={this.state.isLoggedIn} handleInput={this.handleInput} handleSignUp={this.handleSignUp} hideNavBar={this.hideNavBar} />
+                  <SignUpForm isLoggedIn={this.state.isLoggedIn} 
+                  handleInput={this.handleInput} 
+                  handleSignUp={this.handleSignUp} 
+                  hideNavBar={this.hideNavBar} />
                 )
               }}
             /> 
             <Route path='/profile'
               render={(props) => {
                 return (
-                  <Profile isLoggedIn={this.state.isLoggedIn} user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite} favoriteHeadlines={this.favoriteHeadlines}/>
+                  <Profile 
+                  isLoggedIn={this.state.isLoggedIn} 
+                  user={this.state.user}
+                  getStories={this.getStories}
+                  stories={this.state.stories} 
+                  showNavBar={this.showNavBar} 
+                  saveFavorite={this.state.saveFavorite}
+                  />
                 )
               }}
               />
             <Route path='/logout'
               render={(props) => {
                 return (
-                  <LogOut isLoggedIn={this.state.isLoggedIn} handleLogOut={e => this.handleLogOut(e)} />
+                  <LogOut isLoggedIn={this.state.isLoggedIn} 
+                  handleLogOut={e => this.handleLogOut(e)} />
                 )
               }}
             />
+            <Route path='/updateUser'
+              render={(props) => {
+                return (
+                  <ChangePassword isLoggedIn={this.state.isLoggedIn} 
+                  handleInput={this.handleInput} handleSignUp={this.handleSignUp} 
+                  hideNavBar={this.hideNavBar} onHandleChangeUser={this.onHandleChangeUser}  
+                  updateUser={this.updateUser} />
+                )
+              }}
+            /> 
             <Route path='/'
               render={(props) => {
                 return (
-                  <Home user={this.state.user} showNavBar={this.showNavBar} featuredHeadlines={this.state.featuredHeadlines} secondaryHeadlines={this.state.secondaryHeadlines} saveFavorite={this.saveFavorite}/>
+                  <Home user={this.state.user} 
+                  showNavBar={this.showNavBar} 
+                  featuredHeadlines={this.state.featuredHeadlines} 
+                  secondaryHeadlines={this.state.secondaryHeadlines} 
+                  saveFavorite={this.saveFavorite}/>
                 )
               }}
               />
