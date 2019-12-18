@@ -17,7 +17,7 @@ class Profile extends Component {
     console.log('stories', this.props.stories)
     return (
       <div>
-        <FavoriteHeadlines stories={this.props.stories} />
+        <FavoriteHeadlines stories={this.props.stories} deleteStory={this.props.deleteStory} />
       </div>
     )
   }
