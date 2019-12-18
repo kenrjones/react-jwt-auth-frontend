@@ -1,11 +1,20 @@
 import React from 'react'
 
 
-const FavoriteHeadlines = (props) => {
-    if (props.stories) {
-        let favoritenews = props.stories.map( (headline, index) => {
-            console.log(headline.source.title)
-            if (props.user) {
+// const FavoriteHeadlines = (props) => {
+class FavoriteHeadlines extends React.Component {
+
+    handleDelete = (e, headline) => {
+        e.preventDefault()
+        this.props.deleteStory(headline.id)
+    }
+
+    render() {
+        console.log(this.props)
+    if (this.props.stories) {
+        let favoritenews = this.props.stories.map( (headline, index) => {
+            console.log(headline.source)
+            if (this.props.user) {
                 return (
                     <div key={index} id="favorite-articles">
                         <img src={headline.source.urlToImage} alt={headline.source.title}></img>
@@ -13,7 +22,7 @@ const FavoriteHeadlines = (props) => {
                         <h1 className="favorite-title">{headline.source.title}</h1>
                         <p>{headline.source.description}</p>
                         <a className="link" href = {headline.url} target="_blank">READ MORE</a>
-                        <button>Delete</button>
+                        <button onClick={e => this.handleDelete(e, headline)}>Delete</button>
                     </div>
                 )
             }
@@ -25,7 +34,7 @@ const FavoriteHeadlines = (props) => {
                         <h1 className="favorite-title">{headline.source.title}</h1>
                         <p>{headline.source.description}</p>
                         <a className="link" href = {headline.url} target="_blank">READ MORE</a>
-                        <button>Delete</button>
+                        <button onClick={e => this.handleDelete(e, headline)}>Delete</button>
                     </div>
                 )
             }
@@ -40,6 +49,7 @@ const FavoriteHeadlines = (props) => {
             <div>Page is loading...</div>
         )
     }
+}
 }
 
 export default FavoriteHeadlines

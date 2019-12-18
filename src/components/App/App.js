@@ -32,7 +32,8 @@ class App extends Component {
     hideNavBar: false,
     stories: [],
     loading: false,
-    updateUser: {}
+    updateUser: {},
+    id: ''
   }
 
   getHeadlines() {
@@ -276,6 +277,19 @@ class App extends Component {
     });
   };
 
+  deleteStory = (id) => {
+    console.log('deleteStoryid', id)
+    console.log('button works')
+  axios({
+      url: `https://sports-news-777.herokuapp.com/api/stories/${id}`,
+      method: 'delete'
+    })
+      .then(response => {
+        
+        this.setState({deleted:true})
+      })
+};
+
 
 
   render() {
@@ -317,6 +331,7 @@ class App extends Component {
                   stories={this.state.stories} 
                   showNavBar={this.showNavBar} 
                   saveFavorite={this.state.saveFavorite}
+                  deleteStory={this.deleteStory}
                   />
                 )
               }}
