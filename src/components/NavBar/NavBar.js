@@ -10,6 +10,7 @@ class NavBar extends Component {
     console.log('checking props', this.props.isLoggedIn)
     if (this.props.isLoggedIn) {
       navBarItems.push(<li key={5}>{this.props.user.username}</li>)
+      navBarItems.push(<Link key={6} to='/'>update username</Link>)
       navBarItems.push(<Link key={6} to='/profile'>Read Later</Link>)
       navBarItems.push(<Link key={2} to='/logout'>Log Out</Link>)
     } else {
