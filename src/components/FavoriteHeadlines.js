@@ -7,6 +7,7 @@ class FavoriteHeadlines extends React.Component {
     handleDelete = (e, headline) => {
         e.preventDefault()
         this.props.deleteStory(headline.id)
+        window.location.reload(true)
     }
 
     render() {
