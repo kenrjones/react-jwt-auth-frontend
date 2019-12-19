@@ -218,7 +218,9 @@ class App extends Component {
     }).then(response => {
       let stories = this.state.stories;
       stories.push(response.data.story);
+      console.log(stories)
       this.setState({ stories })
+      console.log(this.state.stories)
     }).catch(err => 
       console.log('SaveToFavError', err)
     )

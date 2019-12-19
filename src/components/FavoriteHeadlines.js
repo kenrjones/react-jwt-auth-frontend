@@ -13,7 +13,7 @@ class FavoriteHeadlines extends React.Component {
         console.log(this.props)
     if (this.props.stories) {
         let favoritenews = this.props.stories.map( (headline, index) => {
-            console.log(headline.source)
+            console.log(headline.data)
             if (this.props.user) {
                 return (
                     <div key={index} id="favorite-articles">
