@@ -212,7 +212,7 @@ class App extends Component {
           userId: userId,
           source: story.source.name,
           url: story.url,
-          data: JSON.stringify(story)
+          data: story
         }
       }
     }).then(response => {
